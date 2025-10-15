@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decentralized Land Registry</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/all.min.css" rel="stylesheet">
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 font-poppins">
+    <header class="bg-gray-900/80 backdrop-blur-md shadow-lg sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-semibold flex items-center gap-2">
+                <i class="fas fa-globe text-emerald-400"></i> Decentralized Land Registry
+            </h1>
+            <div class="flex items-center gap-4">
+                <div id="walletInfo" class="text-sm">
+                    <span id="accountAddress" class="flex items-center gap-2">
+                        <i class="fas fa-wallet text-emerald-400"></i> Not Connected
+                    </span>
+                    <span id="networkName" class="flex items-center gap-2">
+                        <i class="fas fa-network-wired text-emerald-400"></i>
+                    </span>
+                </div>
+                <button id="connectWalletBtn" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-1">
+                    <i class="fas fa-link"></i> Connect Wallet
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <nav class="bg-gray-800/80 backdrop-blur-md shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-center gap-4">
+            <button onclick="showSection('registerLandSection')" class="nav-btn bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fas fa-plus-circle"></i> Register Land
+            </button>
+            <button onclick="showSection('viewLandSection')" class="nav-btn bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fas fa-eye"></i> View Land
+            </button>
+            <button onclick="showSection('transferLandSection')" class="nav-btn bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fas fa-exchange-alt"></i> Transfer Land
+            </button>
+        </div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-8">
+        <section id="registerLandSection" class="card bg-gray-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg active-section">
+            <h2 class="text-xl font-medium flex items-center gap-2 mb-4">
+                <i class="fas fa-plus-circle text-emerald-400"></i> Register New Land Parcel (Registrar Only)
+            </h2>
+            <p class="text-gray-300 mb-4">Your connected wallet must be the designated Registrar to register land.</p>
+            <label for="regOwnerAddress" class="flex items-center gap-2 text-gray-200 font-medium mb-2">
+                <i class="fas fa-user text-emerald-400"></i> Initial Owner Address:
+            </label>
+            <input type="text" id="regOwnerAddress" placeholder="0x..." required class="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600 text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300">
+            <label for="landDocument" class="flex items-center gap-2 text-gray-200 font-medium mb-2 mt-4">
+                <i class="fas fa-file-upload text-emerald-400"></i> Upload Land Document (PDF, Image):
+            </label>
+            <input type="file" id="landDocument" accept=".pdf,.png,.jpg,.jpeg" required class="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600 text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300">
+            <button id="registerLandBtn" class="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fas fa-save"></i> Register Land
+            </button>
+            <div id="registerStatus" class="status-message mt-4 p-3 rounded-lg"></div>
+        </section>
+
+        <section id="viewLandSection" class="card bg-gray-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg" style="display: none;">
+            <h2 class="text-xl font-medium flex items-center gap-2 mb-4">
+                <i class="fas fa-eye text-emerald-400"></i> View Land Details
+            </h2>
+            <label for="viewLandId" class="flex items-center gap-2 text-gray-200 font-medium mb-2">
+                <i class="fas fa-id-badge text-emerald-400"></i> Land ID:
+            </label>
+            <input type="number" id="viewLandId" placeholder="e.g., 1" required class="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600 text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300">
+            <button id="viewLandBtn" class="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fas fa-search"></i> View Land
+            </button>
+            <div id="viewStatus" class="status-message mt-4 p-3 rounded-lg"></div>
+            <div id="landDetails" class="mt-4 p-4 bg-gray-700/30 rounded-lg">
+                <p class="text-gray-200"><strong>Owner:</strong> <span id="landOwner"></span></p>
+                <p class="text-gray-200"><strong>IPFS Document:</strong> <a id="landDocLink" href="#" target="_blank" class="text-emerald-400 hover:text-emerald-300 transition-colors"><i class="fas fa-file-alt"></i> View Document</a></p>
+            </div>
+        </section>
+
+        <section id="transferLandSection" class="card bg-gray-800/50 backdrop-blur-md p-6 rounded-xl shadow-lg" style="display: none;">
+            <h2 class="text-xl font-medium flex items-center gap-2 mb-4">
+                <i class="fas fa-exchange-alt text-emerald-400"></i> Transfer Land Ownership
+            </h2>
+            <p class="text-gray-300 mb-4">Ensure your wallet holds the NFT for the land ID you wish to transfer.</p>
+            <label for="transferLandId" class="flex items-center gap-2 text-gray-200 font-medium mb-2">
+                <i class="fas fa-id-badge text-emerald-400"></i> Land ID to Transfer:
+            </label>
+            <input type="number" id="transferLandId" placeholder="e.g., 1" required class="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600 text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300">
+            <label for="newOwnerAddress" class="flex items-center gap-2 text-gray-200 font-medium mb-2 mt-4">
+                <i class="fas fa-user text-emerald-400"></i> New Owner Address:
+            </label>
+            <input type="text" id="newOwnerAddress" placeholder="0x..." required class="w-full p-3 rounded-lg bg-gray-700/50 border border-gray-600 text-gray-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-300">
+            <button id="transferLandBtn" class="mt-4 bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all duration-300 transform hover:-translate-y-1">
+                <i class="fas fa-paper-plane"></i> Transfer Land
+            </button>
+            <div id="transferStatus" class="status-message mt-4 p-3 rounded-lg"></div>
+        </section>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // GSAP animations for sections
+        document.querySelectorAll('.card').forEach(card => {
+            gsap.from(card, {
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                ease: 'power3.out',
+                stagger: 0.2,
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 80%'
+                }
+            });
+        });
+
+        // Micro-interaction for buttons
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(btn, { scale: 1.05, duration: 0.3, ease: 'power2.out' });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(btn, { scale: 1, duration: 0.3, ease: 'power2.out' });
+            });
+        });
+
+        // Show section with animation
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('active-section');
+            });
+            const targetSection = document.getElementById(sectionId);
+            targetSection.style.display = 'block';
+            targetSection.classList.add('active-section');
+            gsap.fromTo(targetSection, 
+                { opacity: 0, y: 20 },
+                { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }
+            );
+        }
+    </script>
+</body>
+</html>
